@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Product | CampusMart</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <a href="index.html" class="logo">
+        Campus<span>Mart</span>
+    </a>
+
+    <div class="nav-links">
+
+        <a href="index.html">Home</a>
+        <a href="sell.html">Sell</a>
+        <a href="cart.html">🛒 Cart</a>
+
+        <span id="loginArea"></span>
+
+    </div>
+
+</nav>
+
+
+<section class="section">
+
+    <div id="productDetail">
+
+        <div class="empty-state">
+            <h2>Loading product...</h2>
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <div class="footer-logo">CampusMart</div>
+
+    <p>Student marketplace for campus life.</p>
+
+</footer>
+
+
+<script src="js/app.js"></script>
+<script src="js/cart.js"></script>
+
+<script>
+
+const API = "http://localhost:8080/api/products";
+
+async function loadProduct() {
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    const id = params.get("id");
+
+    if (!id) {
+        document.getElementById("productDetail").innerHTML =
+            "<h2>Product not found.</h2>";
+        return;
+    }
+
+    try {
+
+        const response = await fetch(`${API}/${id}`);
+
+        if (!response.ok) {
+            throw new Error();
+        }
+
+        const product = await response.json();
+
+        const image = product.imageUrl
+            ? `<img src="${product.imageUrl}" alt="${product.name}">`
+            : "📦";
+
+        document.getElementById("productDetail").innerHTML = `
+
+            <div class="product-detail">
+
+                <div class="detail-image">
+                    ${image}
+                </div>
+
+
+                <div class="detail-content">
+
+                    <span class="badge">
+                        ${product.listingType || "SALE"}
+                    </span>
+
+                    <h1>${product.name}</h1>
+
+                    <div class="detail-price">
+                        ₹${product.price || 0}
+                    </div>
+
+                    <p class="detail-description">
+                        ${product.description || "No description available."}
+                    </p>
+
+
+                    <div class="detail-info">
+
+                        <div class="info-box">
+                            <small>Category</small>
+                            <strong>
+                                ${product.category || "General"}
+                            </strong>
+                        </div>
+
+                        <div class="info-box">
+                            <small>Condition</small>
+                            <strong>
+                                ${product.conditionType || "Used"}
+                            </strong>
+                        </div>
+
+                        <div class="info-box">
+                            <small>Location</small>
+                            <strong>
+                                📍 ${product.location || "Campus"}
+                            </strong>
+                        </div>
+
+                        <div class="info-box">
+                            <small>Seller</small>
+                            <strong>
+                                ${product.sellerName || "Student"}
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="addToCart(${product.id})"
+                        style="width:100%;margin-top:15px;">
+                        🛒 Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    } catch (error) {
+
+        document.getElementById("productDetail").innerHTML = `
+            <div class="empty-state">
+                <h2>Product unavailable</h2>
+                <p>Make sure the backend is running.</p>
+            </div>
+        `;
+    }
+}
+
+loadProduct();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusMart | Student Marketplace</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <a href="index.html" class="logo">
+        Campus<span>Mart</span>
+    </a>
+
+    <div class="nav-links">
+
+        <a href="index.html">Home</a>
+
+        <a href="sell.html">Sell</a>
+
+        <a href="order.html">Orders</a>
+
+        <a href="cart.html" class="cart-link">
+            🛒 Cart
+        </a>
+
+        <span id="loginArea">
+            <a href="login.html" class="nav-btn">Login</a>
+        </span>
+
+    </div>
+
+</nav>
+
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            🎓 Made for Students
+        </div>
+
+        <h1>
+            Buy. Sell. <span>Rent.</span><br>
+            On Campus.
+        </h1>
+
+        <p>
+            CampusMart is a student-focused marketplace where
+            you can buy used books, sell electronics, rent
+            hostel essentials and discover useful items around campus.
+        </p>
+
+        <div class="hero-actions">
+
+            <a href="#marketplace" class="btn btn-primary">
+                Explore Marketplace
+            </a>
+
+            <a href="sell.html" class="btn btn-outline">
+                Sell an Item
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search books, calculators, electronics..."
+        >
+
+        <button onclick="searchProducts()">
+            Search
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="section-header">
+
+        <h2 class="section-title">
+            Browse Categories
+        </h2>
+
+    </div>
+
+    <div class="category-grid">
+
+        <div class="category-card"
+             onclick="filterCategory('Books')">
+
+            <div class="category-icon">📚</div>
+            <strong>Books</strong>
+
+        </div>
+
+        <div class="category-card"
+             onclick="filterCategory('Electronics')">
+
+            <div class="category-icon">💻</div>
+            <strong>Electronics</strong>
+
+        </div>
+
+        <div class="category-card"
+             onclick="filterCategory('Hostel')">
+
+            <div class="category-icon">🛏️</div>
+            <strong>Hostel</strong>
+
+        </div>
+
+        <div class="category-card"
+             onclick="filterCategory('Accessories')">
+
+            <div class="category-icon">🎧</div>
+            <strong>Accessories</strong>
+
+        </div>
+
+        <div class="category-card"
+             onclick="filterCategory('Others')">
+
+            <div class="category-icon">📦</div>
+            <strong>Others</strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section" id="marketplace">
+
+    <div class="section-header">
+
+        <h2 class="section-title">
+            Campus Marketplace
+        </h2>
+
+        <div>
+            <button
+                class="btn btn-outline"
+                onclick="loadProducts()">
+                All
+            </button>
+
+            <button
+                class="btn btn-outline"
+                onclick="filterType('SALE')">
+                Buy
+            </button>
+
+            <button
+                class="btn btn-outline"
+                onclick="filterType('RENT')">
+                Rent
+            </button>
+        </div>
+
+    </div>
+
+    <div id="productGrid" class="product-grid"></div>
+
+</section>
+
+
+<footer>
+
+    <div class="footer-logo">
+        CampusMart
+    </div>
+
+    <p>
+        A student-first marketplace for campus life.
+    </p>
+
+    <p style="margin-top:15px;font-size:13px;">
+        © 2026 CampusMart. Built for students.
+    </p>
+
+</footer>
+
+
+<script src="js/app.js"></script>
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        loadProducts();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Orders | CampusMart</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <a href="index.html" class="logo">
+        Campus<span>Mart</span>
+    </a>
+
+    <div class="nav-links">
+
+        <a href="index.html">Home</a>
+        <a href="sell.html">Sell</a>
+        <a href="cart.html">🛒 Cart</a>
+
+        <span id="loginArea"></span>
+
+    </div>
+
+</nav>
+
+
+<section class="section">
+
+    <div class="section-header">
+
+        <div>
+
+            <h1>My Orders</h1>
+
+            <p style="color:#777;">
+                Your CampusMart purchases.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div id="orders">
+
+        <div class="empty-state">
+            <h2>Loading orders...</h2>
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <div class="footer-logo">
+        CampusMart
+    </div>
+
+    <p>Student marketplace for campus life.</p>
+
+</footer>
+
+
+<script src="js/app.js"></script>
+
+<script>
+
+async function loadOrders() {
+
+    const user = getUser();
+
+    const container =
+        document.getElementById("orders");
+
+
+    if (!user) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <h2>Please login to view orders</h2>
+
+                <a
+                    href="login.html"
+                    class="btn btn-primary">
+                    Login
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            `http://localhost:8080/api/orders/user/${user.id}`
+        );
+
+
+        if (!response.ok) {
+            throw new Error();
+        }
+
+
+        const orders = await response.json();
+
+
+        if (!orders.length) {
+
+            container.innerHTML = `
+
+                <div class="empty-state">
+
+                    <h2>No orders yet 📦</h2>
+
+                    <p>
+                        Your purchases will appear here.
+                    </p>
+
+                    <a
+                        href="index.html"
+                        class="btn btn-primary">
+                        Browse Marketplace
+                    </a>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML = orders.map(order => `
+
+            <div class="order-card">
+
+                <div class="order-header">
+
+                    <strong>
+                        Order #${order.id}
+                    </strong>
+
+                    <span class="status">
+                        ${order.status}
+                    </span>
+
+                </div>
+
+
+                <p>
+                    Pickup:
+                    ${order.pickupLocation}
+                </p>
+
+
+                <p>
+                    Date:
+                    ${new Date(order.orderDate)
+                        .toLocaleString()}
+                </p>
+
+
+                <div style="margin-top:15px;">
+
+                    ${order.items.map(item => `
+
+                        <div style="
+                            display:flex;
+                            justify-content:space-between;
+                            padding:8px 0;
+                            border-bottom:1px solid #eee;">
+
+                            <span>
+                                ${item.productName}
+                                × ${item.quantity}
+                            </span>
+
+                            <strong>
+                                ₹${item.price * item.quantity}
+                            </strong>
+
+                        </div>
+
+                    `).join("")}
+
+                </div>
+
+
+                <div style="
+                    text-align:right;
+                    margin-top:15px;
+                    font-size:20px;
+                    font-weight:800;">
+
+                    Total:
+                    ₹${order.totalAmount}
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+
+    } catch (error) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <h2>Unable to load orders</h2>
+
+                <p>
+                    Make sure your Spring Boot backend is running.
+                </p>
+
+            </div>
+
+        `;
+    }
+}
+
+
+loadOrders();
+
+</script>
+
+</body>
+</html>
